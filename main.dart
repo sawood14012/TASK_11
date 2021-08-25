@@ -9,7 +9,14 @@ Future<List<dynamic>> read_json() async {
 List<String> retrive_catagories(data) {
   List<String> catagories = [];
   for (var i in data) {
-    catagories.add(i['category']);
+    try {
+      if (i['category'] == "") {
+        print("Please enter a Valid Catagory!");
+      }
+      catagories.add(i['category']);
+    } catch (e) {
+      print('JSON OBJECT NOT CORRECT: $e');
+    }
   }
   return catagories.toSet().toList();
 }
@@ -19,9 +26,9 @@ void Display(data, catagories) {
     print("Category: " + i);
     for (var j in data) {
       if (j['category'] == i) {
-        print("ID: "+j['productID'].toString());
-        print("Name: "+j['productName']);
-        print("Price: "+j['price'].toString());
+        print("ID: " + j['productID'].toString());
+        print("Name: " + j['productName']);
+        print("Price: " + j['price'].toString());
       }
     }
   }
@@ -29,8 +36,6 @@ void Display(data, catagories) {
 
 void main() {
   List<String> catagories = [];
-  read_json().then((data) => {
-        catagories = retrive_catagories(data),
-        Display(data, catagories)
-      });
+  read_json().then((data) =>
+      {catagories = retrive_catagories(data), Display(data, catagories)});
 }
